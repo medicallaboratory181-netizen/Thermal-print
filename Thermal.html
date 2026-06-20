@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wholesale Beverage Billing System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f1f5f9;
+            color: #334155;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 20px;
+        }
+        .app-header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+        h2 {
+            color: #1e293b;
+            font-size: 20px;
+            margin-bottom: 2px;
+            line-height: 1.4;
+        }
+        .owner-credentials {
+            font-size: 14px;
+            color: #2563eb;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        .owner-phone {
+            font-size: 14px;
+            color: #475569;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        .owner-address {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .customer-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .customer-section h3 {
+            font-size: 13px;
+            color: #475569;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .customer-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .customer-form input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+        }
+        .customer-form input:focus {
+            border-color: #3b82f6;
+        }
+        .list-header {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            background: #cbd5e1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .items-wrapper {
+            max-height: 350px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 5px;
+            background: #f8fafc;
+        }
+        .item-row {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 10px;
+        }
+        .item-row:last-child {
+            border-bottom: none;
+        }
+        .select-chk {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .item-name {
+            font-size: 14px;
+            font-weight: 500;
+            flex: 1;
+            color: #334155;
+            cursor: pointer;
+        }
+        .item-inputs {
+            display: flex;
+            gap: 6px;
+            width: 160px;
+            opacity: 0.5;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .item-row.selected .item-inputs {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .item-inputs input {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 14px;
+            outline: none;
+        }
+        .item-inputs input:focus {
+            border-color: #3b82f6;
+        }
+        .add-new-box {
+            margin-top: 15px;
+            background: #f0fdf4;
+            border: 1px dashed #22c55e;
+            padding: 12px;
+            border-radius: 8px;
+        }
+        .add-new-box h3 {
+            font-size: 14px;
+            color: #166534;
+            margin-bottom: 8px;
+        }
+        .add-form {
+            display: flex;
+            gap: 8px;
+        }
+        .add-form input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            outline: none;
+        }
+        .btn-add {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-add:hover {
+            background: #16a34a;
+        }
+        .summary-section {
+            margin-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 15px;
+        }
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        .summary-line input {
+            width: 120px;
+            padding: 5px;
+            text-align: right;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .total-val {
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .btn-print {
+            width: 100%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+        }
+        .btn-print:hover {
+            background: #2563eb;
+        }
+
+        /* Thermal Printer Screen Hide */
+        #thermal-receipt {
+            display: none;
+        }
+
+        /* Printing Code for 80mm / 58mm Printer */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #thermal-receipt, #thermal-receipt * {
+                visibility: visible;
+            }
+            #thermal-receipt {
+                display: block !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                max-width: 80mm;
+                padding: 5px;
+                color: #000;
+                background: #fff;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 12px;
+            }
+            .t-center { text-align: center; }
+            .t-bold { font-weight: bold; }
+            .t-header { font-size: 14px; font-weight: bold; margin-bottom: 2px; }
+            .t-sub { font-size: 12px; font-weight: bold; margin-bottom: 2px; color: #000; }
+            .t-phone { font-size: 12px; font-weight: bold; margin-bottom: 2px; color: #000; }
+            .t-address { font-size: 11px; font-weight: bold; margin-bottom: 6px; color: #000; }
+            .t-line { border-top: 1px dashed #000; margin: 5px 0; }
+            .t-row { display: flex; justify-content: space-between; margin: 3px 0; }
+            .t-col-left { width: 55%; word-break: break-all; }
+            .t-col-right { width: 45%; text-align: right; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="app-header">
+        <h2>Malik Zubair Rasool sandila</h2>
+        <div class="owner-credentials">Drink Wholesaler</div>
+        <div class="owner-phone">Mob: 03289498367</div>
+        <div class="owner-address">📍 Near By Pass, Eid Gah Road, Lar Jnubi</div>
+    </div>
+
+    <div class="customer-section">
+        <h3>Customer Details</h3>
+        <div class="customer-form">
+            <input type="text" id="cust_name" placeholder="Customer Name (e.g. Asif)">
+            <input type="tel" id="cust_phone" placeholder="Customer Phone Number">
+        </div>
+    </div>
+    
+    <div class="list-header">
+        <span style="width: 30px;">✔</span>
+        <span style="flex: 1;">Item Name</span>
+        <span style="width: 160px; text-align: center;">Qty & Rate</span>
+    </div>
+
+    <div class="items-wrapper" id="itemsContainer"></div>
+
+    <div class="add-new-box">
+        <h3>+ Add New Item</h3>
+        <div class="add-form">
+            <input type="text" id="new_name" placeholder="e.g., Gourmet 1.5L">
+            <button class="btn-add" onclick="addNewItemRow()">Add</button>
+        </div>
+    </div>
+
+    <div class="summary-section">
+        <div class="summary-line">
+            <span>Total Bill:</span>
+            <span class="total-val" id="lbl_current_total">0.00</span>
+        </div>
+        <div class="summary-line">
+            <span>Sabka Bakaya:</span>
+            <input type="number" id="inp_sabka" value="0" oninput="runCalculations()">
+        </div>
+        <div class="summary-line">
+            <span>Total Rakam:</span>
+            <span class="total-val" id="lbl_grand_total">0.00</span>
+        </div>
+        <div class="summary-line">
+            <span>Wasooly:</span>
+            <input type="number" id="inp_wasooly" value="0" oninput="runCalculations()">
+        </div>
+        <div class="summary-line">
+            <span>Bakaya Rakam:</span>
+            <span class="total-val" id="lbl_bakaya_rakam">0.00</span>
+        </div>
+    </div>
+
+    <button class="btn-print" onclick="triggerPrint()">Print Receipt</button>
+</div>
+
+<div id="thermal-receipt"></div>
+
+<script>
+    // Sary items bilkul sahi tarteeb me
+    const stockItems = [
+        "Dew 2.25l", "Dew 1.5l", "Dew 1l",
+        "Coke 2l", "Coke 1.5l", "Coke 1l",
+        "Pepsi 2.25l", "Pepsi 1.5l", "Pepsi 1l",
+        "Next Cola 2.25l", "Next Cola 1.5l", "Next Cola 1l", "Next Cola 500ml",
+        "7up 2.5l", "7up 1.5l", "7up 1l",
+        "Sprite 2.25l", "Sprite 1.5l", "Sprite 1l",
+        "Sting 500ml", "Next Annar 1l",
+        "Quice 2.25", "Quice 1.5l", "Quice 1l", "Quice 500ml",
+        "Juices Baba", "Maza", "Fitter", 
+        "Quice Juice", "Quice Juice 1l", "Quice Juice 500ml"
+    ];
+
+    const container = document.getElementById('itemsContainer');
+
+    // Display rows on load
+    function renderList() {
+        stockItems.forEach((item, index) => {
+            appendRowHTML(item, index);
+        });
+    }
+
+    // Append single item row structure with Checkbox
+    function appendRowHTML(name, index) {
+        const div = document.createElement('div');
+        div.className = 'item-row';
+        div.id = `row_${index}`;
+        div.innerHTML = `
+            <input type="checkbox" class="select-chk" id="chk_${index}" onchange="toggleRowSelection(${index})">
+            <div class="item-name" onclick="toggleCheckbox(${index})">${name}</div>
+            <div class="item-inputs">
+                <input type="number" class="q-field" placeholder="Qty" data-item="${name}" oninput="runCalculations()">
+                <input type="number" class="r-field" placeholder="Rate" oninput="runCalculations()">
+            </div>
+        `;
+        container.appendChild(div);
+    }
+
+    // Toggle label click to click checkbox
+    function toggleCheckbox(index) {
+        const chk = document.getElementById(`chk_${index}`);
+        chk.checked = !chk.checked;
+        toggleRowSelection(index);
+    }
+
+    // Activate/Deactivate Inputs based on Checkbox
+    function toggleRowSelection(index) {
+        const row = document.getElementById('row_' + index);
+        const chk = document.getElementById('chk_' + index);
+        
+        if (chk.checked) {
+            row.classList.add('selected');
+        } else {
+            row.classList.remove('selected');
+            row.querySelector('.q-field').value = "";
+            row.querySelector('.r-field').value = "";
+        }
+        runCalculations();
+    }
+
+    // Dynamic Item Adding function
+    function addNewItemRow() {
+        const inputField = document.getElementById('new_name');
+        const value = inputField.value.trim();
+        if(value !== "") {
+            const newIndex = Date.now();
+            appendRowHTML(value, newIndex);
+            inputField.value = "";
+            container.scrollTop = container.scrollHeight;
+        } else {
+            alert("Please enter a valid item name.");
+        }
+    }
+
+    // Central calculation engine (Only calculates checked items)
+    function runCalculations() {
+        let currentBillTotal = 0;
+        const selectedRows = document.querySelectorAll('.item-row.selected');
+
+        selectedRows.forEach(row => {
+            const qty = parseFloat(row.querySelector('.q-field').value) || 0;
+            const rate = parseFloat(row.querySelector('.r-field').value) || 0;
+            currentBillTotal += (qty * rate);
+        });
+
+        const sabkaBakaya = parseFloat(document.getElementById('inp_sabka').value) || 0;
+        const grandTotal = currentBillTotal + sabkaBakaya;
+        const totalWasooly = parseFloat(document.getElementById('inp_wasooly').value) || 0;
+        const finalRemaining = grandTotal - totalWasooly;
+
+        document.getElementById('lbl_current_total').innerText = currentBillTotal.toFixed(2);
+        document.getElementById('lbl_grand_total').innerText = grandTotal.toFixed(2);
+        document.getElementById('lbl_bakaya_rakam').innerText = finalRemaining.toFixed(2);
+
+        return {
+            currentBill: currentBillTotal,
+            sabka: sabkaBakaya,
+            grand: grandTotal,
+            wasooly: totalWasooly,
+            remaining: finalRemaining
+        };
+    }
+
+    // Generate Invoice Template & Print
+    function triggerPrint() {
+        const calculationData = runCalculations();
+        const selectedRows = document.querySelectorAll('.item-row.selected');
+        
+        // Get customer data
+        const customerName = document.getElementById('cust_name').value.trim() || "Walk-in Customer";
+        const customerPhone = document.getElementById('cust_phone').value.trim() || "N/A";
+
+        let receiptHTML = `
+            <div class="t-center t-header">Malik Zubair Rasool sandila</div>
+            <div class="t-center t-sub">Drink Wholesaler</div>
+            <div class="t-center t-phone">Mob: 03289498367</div>
+            <div class="t-center t-address">📍 Near By Pass, Eid Gah Road, Lar Jnubi</div>
+            <div class="t-row"><span>Date: ${new Date().toLocaleDateString()}</span><span>Time: ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></div>
+            <div class="t-line"></div>
+            <div class="t-row"><span>Cust: ${customerName}</span></div>
+            <div class="t-row"><span>Phone: ${customerPhone}</span></div>
+            <div class="t-line"></div>
+            <div class="t-row t-bold">
+                <span class="t-col-left">Description</span>
+                <span class="t-col-right">Qty x Rate = Total</span>
+            </div>
+            <div class="t-line"></div>
+        `;
+
+        if (selectedRows.length === 0 && calculationData.sabka === 0) {
+            alert("No items selected or no previous dues entered.");
+            return;
+        }
+
+        selectedRows.forEach(row => {
+            const qty = parseFloat(row.querySelector('.q-field').value) || 0;
+            const rate = parseFloat(row.querySelector('.r-field').value) || 0;
+            const name = row.querySelector('.q-field').getAttribute('data-item');
+            const rowSum = qty * rate;
+
+            receiptHTML += `
+                <div class="t-row">
+                    <span class="t-col-left">${name}</span>
+                    <span class="t-col-right">${qty} x ${rate} = ${rowSum.toFixed(2)}</span>
+                </div>
+            `;
+        });
+
+        // Final print block using simple lines (strictly no boxes)
+        receiptHTML += `
+            <div class="t-line"></div>
+            <div class="t-row"><span>Total Current Bill:</span><span class="t-bold">${calculationData.currentBill.toFixed(2)}</span></div>
+            <div class="t-row"><span>Sabka Bakaya:</span><span class="t-bold">${calculationData.sabka.toFixed(2)}</span></div>
+            <div class="t-row"><span>Total Rakam:</span><span class="t-bold">${calculationData.grand.toFixed(2)}</span></div>
+            <div class="t-row"><span>Wasooly:</span><span class="t-bold">${calculationData.wasooly.toFixed(2)}</span></div>
+            <div class="t-row"><span>Bakaya Rakam:</span><span class="t-bold">${calculationData.remaining.toFixed(2)}</span></div>
+            <div class="t-line"></div>
+            <div class="t-center" style="margin-top: 12px; font-size: 11px;">Thank You for your business!</div>
+        `;
+
+        document.getElementById('thermal-receipt').innerHTML = receiptHTML;
+        window.print();
+    }
+
+    // Load initial array onto the screen
+    window.onload = renderList;
+</script>
+
+</body>
+</html>
